@@ -122,7 +122,7 @@ function checkWinner() {
 function recordChecker() {
   if (playerScore === 5 && (moves < record || record === 0)) {
     record = moves;
-    rec.textContent = `PERSONAL BEST ${record}`;
+    rec.textContent = `PERSONAL BEST:  ${record}`;
   } else if (playerScore === 5 && moves < record) {
     rec.textContent = moves;
   }
