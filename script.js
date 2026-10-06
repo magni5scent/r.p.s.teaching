@@ -16,7 +16,7 @@ let record = 0;
 
 //computer choice
 function computerChoice() {
-  const compPick = ["rock", "paper", "scissors"];
+  const compPick = ["ROCK", "PAPER", "SCISSORS"];
   let random = compPick[Math.floor(Math.random() * compPick.length)];
   return random;
 }
@@ -25,11 +25,11 @@ function computerChoice() {
 function playerChoice() {
   options.forEach((btn) => {
     btn.addEventListener("click", () => {
-      player = btn.textContent.toLowerCase();
-      playerPot.textContent = `Player: ${player}`;
+      player = btn.textContent.toUpperCase();
+      playerPot.textContent = `PLAYER: ${player}`;
 
       computer = computerChoice();
-      computerPot.textContent = `Computer: ${computer}`;
+      computerPot.textContent = `COMPUTER: ${computer}`;
 
       gameRules();
     });
@@ -96,25 +96,25 @@ function refresh() {
 
 function checkWinner() {
   if (playerScore >= 5) {
-    resultPot.textContent = "You win the game!🎉🍾";
+    resultPot.textContent = "NA ME NAU!🎉🍾";
     setTimeout(() => {
       restart();
-    }, 1000);
+    }, 2000);
 
     btnDisable();
     recordChecker();
   } else if (computerScore >= 5) {
-    resultPot.textContent = "Game Over!😢";
+    resultPot.textContent = "GAME OVER!💩";
     setTimeout(() => {
       const restarter = document.createElement("button");
-      restarter.textContent = "Play Again";
+      restarter.textContent = "RETRY";
       restarter.classList.add("restart");
       resultPot.appendChild(restarter);
 
       restarter.addEventListener("click", () => {
         refresh();
       });
-    }, 1000);
+    }, 2000);
     btnDisable();
   }
 }
@@ -122,7 +122,7 @@ function checkWinner() {
 function recordChecker() {
   if (playerScore === 5 && (moves < record || record === 0)) {
     record = moves;
-    rec.textContent = `PERSONAL BEST:  ${record}`;
+    rec.textContent = `PERSONAL BEST --- ${record}`;
   } else if (playerScore === 5 && moves < record) {
     rec.textContent = moves;
   }
@@ -130,7 +130,7 @@ function recordChecker() {
 
 function restart() {
   const restartBtn = document.createElement("button");
-  restartBtn.textContent = "Restart";
+  restartBtn.textContent = "RESTART";
   restartBtn.id = "restart";
   resultPot.appendChild(restartBtn);
 
