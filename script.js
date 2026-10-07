@@ -16,8 +16,9 @@ let computer;
 let result;
 let playerScore = 0;
 let computerScore = 0;
-let record = 0;
-
+let gameOver = false;
+let record = Number(localStorage.getItem("bestScore")) || 0;
+rec.textContent = `PERSONAL BEST --- ${record}`;
 
 //MODAL
 
@@ -47,7 +48,8 @@ document.addEventListener("keydown", function (e) {
 //computer choice
 function computerChoice() {
   const compPick = ["ROCK", "PAPER", "SCISSORS"];
-  let random = compPick[Math.floor(Math.random() * compPick.length)].toLowerCase();
+  let random =
+    compPick[Math.floor(Math.random() * compPick.length)].toLowerCase();
   return random;
 }
 
@@ -55,6 +57,8 @@ function computerChoice() {
 function playerChoice() {
   options.forEach((btn) => {
     btn.addEventListener("click", () => {
+      if (gameOver) return;
+
       player = btn.alt.toLowerCase();
       playerPot.textContent = `PLAYER: ${player}`;
 
@@ -68,7 +72,10 @@ function playerChoice() {
 playerChoice();
 
 //logic of the game, how it is played together with checking winner and restarting the game.
+
 function gameRules() {
+  if (gameOver) return;
+
   if (player === computer) {
     result = "Tied";
     moves++;
@@ -97,21 +104,8 @@ function gameRules() {
   // restart();
 }
 
-//disbale buttons after a winner is gotten
-function btnDisable() {
-  options.forEach((btn) => {
-    btn.disabled = true;
-  });
-}
-
-//enable the options button after you click the restart button.
-function btnEnabled() {
-  options.forEach((btn) => {
-    btn.disabled = false;
-  });
-}
-
 function refresh() {
+  gameOver = false;
   resultPot.textContent = "Result: ";
   movesTaken.textContent = "Moves: 0";
   playerPot.textContent = "Player: ";
@@ -121,19 +115,24 @@ function refresh() {
   moves = 0;
   playerScore = 0;
   computerScore = 0;
-  btnEnabled();
 }
 
 function checkWinner() {
+  if (gameOver) return;
+
   if (playerScore >= 5) {
+    gameOver = true;
+
     resultPot.textContent = "NA ME NAU!🎉🍾";
+
     setTimeout(() => {
       restart();
     }, 2000);
 
-    btnDisable();
     recordChecker();
   } else if (computerScore >= 5) {
+    gameOver = true;
+
     resultPot.textContent = "GAME OVER!💩";
     setTimeout(() => {
       const restarter = document.createElement("button");
@@ -145,26 +144,26 @@ function checkWinner() {
         refresh();
       });
     }, 2000);
-    btnDisable();
   }
 }
 
 function recordChecker() {
   if (playerScore === 5 && (moves < record || record === 0)) {
     record = moves;
+    localStorage.setItem("bestScore", record);
     rec.textContent = `PERSONAL BEST --- ${record}`;
-  } else if (playerScore === 5 && moves < record) {
-    rec.textContent = moves;
   }
 }
 
 function restart() {
-  const restartBtn = document.createElement("button");
-  restartBtn.textContent = "RESTART";
-  restartBtn.id = "restart";
-  resultPot.appendChild(restartBtn);
+  if (!document.querySelector("#restart")) {
+    const restartBtn = document.createElement("button");
+    restartBtn.textContent = "RESTART";
+    restartBtn.id = "restart";
+    resultPot.appendChild(restartBtn);
 
-  restartBtn.addEventListener("click", () => {
-    refresh();
-  });
+    restartBtn.addEventListener("click", () => {
+      refresh();
+    });
+  }
 }
