@@ -4,6 +4,10 @@ const computerPot = document.querySelector("#computerPot");
 const resultPot = document.querySelector("#resultPot");
 const movesTaken = document.querySelector(".movesLeft");
 const rec = document.querySelector(".rec");
+const modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
+const btnCloseModal = document.querySelector(".btn--close-modal");
+const btnsOpenModal = document.querySelectorAll(".btn--show-modal");
 let playerscoreCum = document.querySelector(".playerScore");
 let computerscoreCum = document.querySelector(".computerScore");
 let moves = 0;
@@ -14,10 +18,36 @@ let playerScore = 0;
 let computerScore = 0;
 let record = 0;
 
+
+//MODAL
+
+const openModal = function (e) {
+  e.preventDefault();
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
+
+const closeModal = function () {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+for (let i = 0; i < btnsOpenModal.length; i++)
+  btnsOpenModal[i].addEventListener("click", openModal);
+
+btnCloseModal.addEventListener("click", closeModal);
+overlay.addEventListener("click", closeModal);
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeModal();
+  }
+});
+
 //computer choice
 function computerChoice() {
   const compPick = ["ROCK", "PAPER", "SCISSORS"];
-  let random = compPick[Math.floor(Math.random() * compPick.length)];
+  let random = compPick[Math.floor(Math.random() * compPick.length)].toLowerCase();
   return random;
 }
 
@@ -25,7 +55,7 @@ function computerChoice() {
 function playerChoice() {
   options.forEach((btn) => {
     btn.addEventListener("click", () => {
-      player = btn.textContent.toUpperCase();
+      player = btn.alt.toLowerCase();
       playerPot.textContent = `PLAYER: ${player}`;
 
       computer = computerChoice();
@@ -49,7 +79,7 @@ function gameRules() {
     (player === "paper" && computer === "rock") ||
     (player === "scissors" && computer === "paper")
   ) {
-    result = `VAMOS! ${player} beats ${computer}`;
+    result = `Good Guess! ${player} beats ${computer}`;
     resultPot.textContent = ` ${result}`;
     playerScore++;
     moves++;
